@@ -5,6 +5,7 @@ import Footer from '../components/chrome/Footer.astro';
 import Header from '../components/chrome/Header.astro';
 import SkipLink from '../components/chrome/SkipLink.astro';
 import LayerOrder from '../components/LayerOrder.astro';
+import MeshCanvas from '../components/MeshCanvas.astro';
 import '../styles/tokens.css';
 import '../styles/typography.css';
 import '../styles/base.css';
@@ -45,6 +46,7 @@ const { title, description } = Astro.props;
     <Font cssVariable="--font-mono" />
   </head>
   <body>
+    <MeshCanvas />
     <SkipLink />
     <Header />
     <main id="main" tabindex="-1"><slot /></main>

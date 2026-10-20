@@ -24,7 +24,7 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm format` | Biome auto-fix |
 | `pnpm build` | Production build |
 | `pnpm budget` | Fails if JS exceeds the weight budgets in `budgets.json` (run after build) |
-| `pnpm lighthouse` | Lighthouse CI against `dist/` using `lighthouserc.json` (needs Chrome; reports go to `.lighthouseci/`) |
+| `pnpm lighthouse` | Two Lighthouse CI stages against `dist/` (needs Chrome; reports go to `.lighthouseci/`): content budgets with the 3D chunk blocked (`lighthouserc.json`), then the home page with 3D loading (`lighthouserc.3d.json`) |
 | `pnpm test` | Vitest unit tests (`*.test.ts` / `*.test.mjs` next to the code) |
 | `pnpm test:e2e` | Playwright smoke + screenshot tests at 360 and 1440 px (`CHROMIUM_PATH=/usr/bin/chromium` to use a system browser); needs `pnpm build` first |
 | `pnpm baselines <run-id>` | Copies CI's screenshots from a failed run into `tests/e2e/__screenshots__` (CI's renderer is the source of truth) |
@@ -74,6 +74,11 @@ shimmer is a translating gradient; the magnetic button is a ~1 KB script that is
 Chrome: `layouts/Base.astro` provides skip link, header, `<main id="main">`, footer and `ClientRouter` view
 transitions; the saved theme is applied by an inline head script (see `docs/decisions/0006`). Scripts that act on page
 elements must be delegated on `document` so they survive page swaps. New pages use `Base` and go in `src/pages/`.
+
+3D: `src/scene/` is only ever loaded lazily by `MeshCanvas.astro` (never import it from pages/layouts). `three` and
+`src/scene/` are bundled into one chunk named `scene` (see `astro.config.mjs`), budgeted by `pnpm budget`. The host
+owns the renderer and loop; scenes implement `MeshScene` (`scene.ts`). Canvas state is on `#mesh[data-mesh]`. See
+`docs/decisions/0007` (measurements, and the open 250 KB question for P4.3).
 
 ## Naming
 

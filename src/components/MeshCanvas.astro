@@ -1,0 +1,47 @@
+---
+// The one persistent canvas behind every page. `transition:persist` keeps the same element (and its
+// WebGL context) alive across view transitions, so the Mesh never reloads or flashes.
+// The 3D code is a separate chunk, fetched only after the page has loaded and the browser is idle,
+// so it can never delay content (LCP). With JS off, WebGL off or reduced motion the canvas stays empty.
+---
+
+<canvas id="mesh" class="mesh" aria-hidden="true" data-mesh="off" transition:persist></canvas>
+
+<script>
+  const canvas = document.getElementById('mesh') as HTMLCanvasElement | null;
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  const skip = matchMedia('(prefers-reduced-motion: reduce)').matches || connection?.saveData;
+
+  if (canvas && !skip) {
+    const start = () => {
+      canvas.dataset.mesh = 'loading';
+      import('../scene/host')
+        .then((m) => m.startMesh(canvas))
+        .catch(() => {
+          canvas.dataset.mesh = 'unsupported';
+        });
+    };
+    const whenIdle = () =>
+      'requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 3000 }) : setTimeout(start, 1000);
+    if (document.readyState === 'complete') whenIdle();
+    else addEventListener('load', whenIdle, { once: true });
+  }
+</script>
+
+<style>
+  @layer components {
+    .mesh {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-canvas);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--dur-slow) var(--ease-out);
+    }
+    .mesh[data-mesh='running'] {
+      opacity: 1;
+    }
+  }
+</style>

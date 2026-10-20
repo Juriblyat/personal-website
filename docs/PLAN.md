@@ -121,7 +121,7 @@ Suggested order for a single builder: P0 → P1 → P4.1–P4.3 (de-risk the Mes
 | P1.2 | Typography | Self-hosted, subsetted Geist + Geist Mono (via Astro's Fonts API); fluid type scale; preload | Type specimen on `/lab`; zero layout shift on font load | Done |
 | P1.3 | Layout primitives | Container, grid, stack, section rhythm; breakpoints | `/lab/layout` correct at 360, 768, 1440 px | Done |
 | P1.4 | Core components | Button (magnetic), Link (animated underline), Tag, Card, Callout, Kbd, icon set | All on `/lab` with focus, hover and reduced-motion states | Done |
-| P1.5 | Site chrome and transitions | Header, nav, footer, skip link; `ClientRouter` view transitions between pages | Navigation animates with JS on and works plainly with JS off | In review |
+| P1.5 | Site chrome and transitions | Header, nav, footer, skip link; `ClientRouter` view transitions between pages | Navigation animates with JS on and works plainly with JS off | Done |
 
 ### Phase 2 — Content engine
 
@@ -148,7 +148,7 @@ Suggested order for a single builder: P0 → P1 → P4.1–P4.3 (de-risk the Mes
 
 | ID | Piece | Delivers | Done when | Status |
 | --- | --- | --- | --- | --- |
-| P4.1 | Canvas host | One fixed, persistent canvas (`transition:persist`); 3D code lazy-loaded after LCP; render loop that pauses when hidden or off-screen; device-pixel-ratio cap | Canvas survives navigation; LCP unchanged versus WebGL off | Not started |
+| P4.1 | Canvas host | One fixed, persistent canvas (`transition:persist`); 3D code lazy-loaded after LCP; render loop that pauses when hidden or off-screen; device-pixel-ratio cap | Canvas survives navigation; LCP unchanged versus WebGL off | In review |
 | P4.2 | Capability tiers | Detects WebGPU / WebGL 2, GPU class, reduced motion, Save-Data → high / mid / low; `?tier=` override for testing | Each tier can be forced and looks intentional | Not started |
 | P4.3 | The Mesh scene | Node graph, edges, flowing request particles, TSL shaders, bloom | Hits section 4 frame-time budgets per tier | Not started |
 | P4.4 | Pointer interaction | Requests bend toward the cursor or touch, hovered nodes pulse, click sends a burst | Feels instant; INP stays ≤ 100 ms | Not started |
