@@ -108,9 +108,9 @@ Suggested order for a single builder: P0 → P1 → P4.1–P4.3 (de-risk the Mes
 
 | ID | Piece | Delivers | Done when | Status |
 | --- | --- | --- | --- | --- |
-| P0.1 | Repo and tooling | Astro + TS strict + Svelte + Biome + pnpm, folder layout, `CLAUDE.md` with conventions | `pnpm dev` runs, lint and typecheck pass, conventions committed | Not started |
-| P0.2 | CI pipeline | GitHub Actions: typecheck, lint, test, build, Lighthouse CI and bundle-size checks with section 4 budgets | A deliberately oversized bundle fails the PR | Not started |
-| P0.3 | Deploy | Cloudflare Worker with static assets via Wrangler; preview per PR, production on `main`, custom domain | Hello-world live on your domain; PRs get a preview URL | Not started |
+| P0.1 | Repo and tooling | Astro + TS strict + Svelte + Biome + pnpm, folder layout, `CLAUDE.md` with conventions | `pnpm dev` runs, lint and typecheck pass, conventions committed | Done |
+| P0.2 | CI pipeline | GitHub Actions: typecheck, lint, test, build, Lighthouse CI and bundle-size checks with section 4 budgets | A deliberately oversized bundle fails the PR | Done |
+| P0.3 | Deploy | Cloudflare Worker with static assets via Wrangler; preview per PR, production on `main`, custom domain | Hello-world live on `workers.dev` (custom domain deferred, see `docs/decisions/0003`); PRs get a preview URL | In review |
 | P0.4 | Test harness | Vitest, Playwright smoke test, screenshot comparison at 360 and 1440 px | One test of each kind runs green in CI | Not started |
 
 ### Phase 1 — Design system
@@ -167,6 +167,8 @@ Suggested order for a single builder: P0 → P1 → P4.1–P4.3 (de-risk the Mes
 | P5.5 | Ops overlay | Hidden overlay (key combo) showing FPS, frame time, render tier, live request count | Toggles cleanly; zero cost while hidden | Not started |
 
 ### Phase 6 — Backend and live data
+
+> **Preview isolation:** PR previews from `versions upload` share production bindings (same D1, KV, Durable Objects). Before P6.1, either keep previews read-only or evaluate isolated preview resources. See `docs/decisions/0004`.
 
 | ID | Piece | Delivers | Done when | Status |
 | --- | --- | --- | --- | --- |

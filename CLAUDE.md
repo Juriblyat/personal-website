@@ -69,6 +69,13 @@ Files: `kebab-case` for routes/lib, `PascalCase` for components. Stores `camelCa
 5. Quality tiers: **high** (WebGPU, compute particles), **mid** (WebGL 2, fewer particles), **low** (poster image).
    The render loop pauses when the tab is hidden or the canvas is off-screen.
 
+## Deploy
+
+Cloudflare Worker `personal-website` (static assets from `dist/`, config in `wrangler.jsonc`), live at
+`https://personal-website.juriblyat.workers.dev`. CI deploys through GitHub Actions only: PRs upload a preview
+version at `pr-<n>-personal-website.juriblyat.workers.dev`; `main` deploys production. Both wait for `verify`.
+Never set `run_worker_first` to `/*`. Hosting decisions are in `docs/decisions/0001`–`0004`.
+
 ## Rules for dependencies
 
 **Never add a dependency without saying why** — state the reason and its gzip size in the PR before adding it.

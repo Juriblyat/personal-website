@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "personal-website",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": true,
+  // Static site only for now. The API Worker (`main`) arrives in P6.1; when it does, scope
+  // `assets.run_worker_first` to ["/api/*"]. Never "/*": it would meter every page view.
+  "assets": {
+    "directory": "./dist"
+  }
+}

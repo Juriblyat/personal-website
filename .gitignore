@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 # lighthouse reports
 .lighthouseci/
+.dev.vars
+.wrangler/
