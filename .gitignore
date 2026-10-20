@@ -27,3 +27,5 @@ pnpm-debug.log*
 .lighthouseci/
 .dev.vars
 .wrangler/
+playwright-report/
+test-results/

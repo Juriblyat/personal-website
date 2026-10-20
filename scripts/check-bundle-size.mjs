@@ -4,6 +4,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { gzipSync } from 'node:zlib';
+import { initialScriptUrls } from './lib/page-scripts.mjs';
 
 const DIST = 'dist';
 const budgets = JSON.parse(readFileSync('budgets.json', 'utf8'));
@@ -20,13 +21,8 @@ const failures = [];
 
 for (const page of files.filter((f) => f.endsWith('.html'))) {
   const html = readFileSync(page, 'utf8');
-  const urls = [
-    ...html.matchAll(/<script[^>]+src="([^"]+\.js)"/g),
-    ...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="([^"]+)"/g),
-  ].map((m) => m[1]);
-  const total = [...new Set(urls)]
-    .filter((u) => u.startsWith('/'))
-    .reduce((sum, u) => sum + gzipKb(join(DIST, u)), 0);
+  const urls = initialScriptUrls(html);
+  const total = urls.reduce((sum, u) => sum + gzipKb(join(DIST, u)), 0);
   const label = `${relative(DIST, page)} initial JS`;
   console.log(`${label}: ${total.toFixed(1)} / ${budgets.initialJsGzipKb} KB gzip`);
   if (total > budgets.initialJsGzipKb) failures.push(label);
