@@ -1,0 +1,86 @@
+---
+import '../styles/layers.css';
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <title>{title} · lab</title>
+  </head>
+  <body>
+    <header>
+      <strong>/lab</strong>
+      <nav><a href="/lab/tokens">tokens</a></nav>
+      <button type="button" id="theme">theme: auto</button>
+    </header>
+    <main><slot /></main>
+  </body>
+</html>
+
+<script is:inline>
+  // Dev-only playground: cycle auto → dark → light.
+  const modes = [undefined, 'dark', 'light'];
+  let i = 0;
+  const button = document.getElementById('theme');
+  button.addEventListener('click', () => {
+    i = (i + 1) % modes.length;
+    const mode = modes[i];
+    if (mode) document.documentElement.dataset.theme = mode;
+    else delete document.documentElement.dataset.theme;
+    button.textContent = `theme: ${mode ?? 'auto'}`;
+  });
+</script>
+
+<style is:global>
+  @layer base {
+    body {
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font: 16px/1.5 system-ui, sans-serif;
+    }
+    header {
+      display: flex;
+      gap: var(--space-5);
+      align-items: center;
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--color-line);
+    }
+    header button {
+      margin-left: auto;
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-pill);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font: inherit;
+      cursor: pointer;
+    }
+    a {
+      color: var(--color-accent);
+    }
+    main {
+      padding: var(--space-6);
+      max-width: 72rem;
+    }
+    h1,
+    h2 {
+      margin: var(--space-7) 0 var(--space-4);
+    }
+    h1 {
+      margin-top: 0;
+    }
+    code {
+      font-family: ui-monospace, monospace;
+      color: var(--color-text-2);
+    }
+  }
+</style>

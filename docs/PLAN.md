@@ -46,9 +46,9 @@ The browser gets plain HTML first; islands and the Mesh share state through one 
 
 ### Visual language
 
-- **Colour:** dark-first. Near-black base with a faint blue cast, three greys for text hierarchy, ONE electric accent (phosphor green or electric cyan, decide in P1.1) and one warm "incident" colour used only for errors and alerts on /status.
+- **Colour:** dark and light themes (see `docs/decisions/0005`). Dark is near-black with a faint blue cast; light is pastel pink. Three greys for text hierarchy, a primary accent plus two secondary signals (phosphor green, cyan and magenta in dark; deepened equivalents in light), and one warm "incident" colour used only for errors and alerts on /status.
 - **Type:** Geist for display and body, Geist Mono for data, labels and code (both free and variable). Large, tightly tracked display sizes; fluid scale with `clamp()`.
-- **Texture:** fine grain overlay, hairline 1px rules, subtle grid hints. No drop shadows, no gradients on UI chrome.
+- **Texture and effects:** fine grain overlay, hairline 1px rules, subtle grid hints, plus blur, glow, shadow, shimmer and animated geometric shapes that react to the pointer. Effects are tokens and obey the motion rules: only `transform` and `opacity` animate.
 
 ### The Mesh, scene by scene
 
@@ -110,14 +110,14 @@ Suggested order for a single builder: P0 → P1 → P4.1–P4.3 (de-risk the Mes
 | --- | --- | --- | --- | --- |
 | P0.1 | Repo and tooling | Astro + TS strict + Svelte + Biome + pnpm, folder layout, `CLAUDE.md` with conventions | `pnpm dev` runs, lint and typecheck pass, conventions committed | Done |
 | P0.2 | CI pipeline | GitHub Actions: typecheck, lint, test, build, Lighthouse CI and bundle-size checks with section 4 budgets | A deliberately oversized bundle fails the PR | Done |
-| P0.3 | Deploy | Cloudflare Worker with static assets via Wrangler; preview per PR, production on `main`, custom domain | Hello-world live on `workers.dev` (custom domain deferred, see `docs/decisions/0003`); PRs get a preview URL | In review |
-| P0.4 | Test harness | Vitest, Playwright smoke test, screenshot comparison at 360 and 1440 px | One test of each kind runs green in CI | Not started |
+| P0.3 | Deploy | Cloudflare Worker with static assets via Wrangler; preview per PR, production on `main`, custom domain | Hello-world live on `workers.dev` (custom domain deferred, see `docs/decisions/0003`); PRs get a preview URL | Done |
+| P0.4 | Test harness | Vitest, Playwright smoke test, screenshot comparison at 360 and 1440 px | One test of each kind runs green in CI | Done |
 
 ### Phase 1 — Design system
 
 | ID | Piece | Delivers | Done when | Status |
 | --- | --- | --- | --- | --- |
-| P1.1 | Tokens | Colour, spacing, radius, z-index, easing and duration tokens as CSS custom properties; cascade layers; accent decided | `/lab/tokens` shows every token (`/lab` = dev-only playground, excluded from prod) | Not started |
+| P1.1 | Tokens | Colour, spacing, radius, z-index, easing and duration tokens as CSS custom properties; cascade layers; accent decided | `/lab/tokens` shows every token (`/lab` = dev-only playground, excluded from prod) | In review |
 | P1.2 | Typography | Self-hosted, subsetted Geist + Geist Mono; fluid type scale; preload | Type specimen on `/lab`; zero layout shift on font load | Not started |
 | P1.3 | Layout primitives | Container, grid, stack, section rhythm; breakpoints | `/lab/layout` correct at 360, 768, 1440 px | Not started |
 | P1.4 | Core components | Button (magnetic), Link (animated underline), Tag, Card, Callout, Kbd, icon set | All on `/lab` with focus, hover and reduced-motion states | Not started |
@@ -242,8 +242,8 @@ Use a stronger model for review and for the riskiest pieces (P4.3, P4.5, P6.3): 
 Nothing here blocks Phase 0; each item is needed by the piece in brackets.
 
 - [ ] Domain name (P0.3)
-- [ ] Accent colour: phosphor green or electric cyan; plus 3–5 sites whose feel you love (P1.1)
-- [ ] Dark-only, or a light mode too (P1.1)
+- [x] Accent colour: decided, see `docs/decisions/0005` (still open: 3–5 reference sites, optional)
+- [x] Dark and light modes (P1.1)
 - [ ] Positioning line and short bio (P3.1, P3.5)
 - [ ] The first 3–5 projects to feature, with whatever raw material you have: notes, diagrams, numbers (P3.3)
 - [ ] API language: TypeScript on Workers (default) or Rust compiled to WebAssembly as a backend flex (P6.1)

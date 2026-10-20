@@ -46,6 +46,12 @@ worker/           Cloudflare Worker + API (from P0.3 / P6.1)
 docs/             PLAN.md, decisions/
 ```
 
+## Styling
+
+Tokens live in `src/styles/tokens.css` (colours use `light-dark()`; one definition per token) and every stylesheet
+uses cascade layers declared in `src/styles/layers.css`. Use tokens, never raw colours or magic numbers. Browse them at
+`/lab/tokens` in dev; `/lab` is never built for production. `src/styles/tokens.test.ts` enforces AA contrast.
+
 ## Naming
 
 Files: `kebab-case` for routes/lib, `PascalCase` for components. Stores `camelCase`. CSS custom properties
