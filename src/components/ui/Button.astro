@@ -1,0 +1,149 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md';
+  /** Pulls toward the pointer (fine pointers only, never under reduced motion). */
+  magnetic?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+}
+const { href, variant = 'primary', size = 'md', magnetic = false, type = 'button' } = Astro.props;
+const Element = href ? 'a' : 'button';
+const attrs = href ? { href } : { type };
+---
+
+{magnetic ? <span class="magnet" data-magnetic>
+  <Element class={`btn ${variant} ${size}`} {...attrs}>
+    <span class="shine" aria-hidden="true"></span>
+    <span class="label"><slot /></span>
+  </Element>
+</span> : <Element class={`btn ${variant} ${size}`} {...attrs}>
+  <span class="shine" aria-hidden="true"></span>
+  <span class="label"><slot /></span>
+</Element>}
+
+<script>
+  // Magnetic pull: the wrapper (which never moves) tracks the pointer; the button follows via --mx/--my.
+  const canHover = matchMedia(
+    '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
+  ).matches;
+  if (canHover) {
+    for (const zone of document.querySelectorAll<HTMLElement>('[data-magnetic]')) {
+      const btn = zone.firstElementChild as HTMLElement;
+      zone.addEventListener('pointermove', (e) => {
+        const r = zone.getBoundingClientRect();
+        btn.style.setProperty('--mx', `${(e.clientX - r.left - r.width / 2) * 0.25}px`);
+        btn.style.setProperty('--my', `${(e.clientY - r.top - r.height / 2) * 0.25}px`);
+      });
+      zone.addEventListener('pointerleave', () => {
+        btn.style.removeProperty('--mx');
+        btn.style.removeProperty('--my');
+      });
+    }
+  }
+</script>
+
+<style>
+  @layer components {
+    .magnet {
+      display: inline-flex;
+      padding: var(--space-4);
+      margin: calc(var(--space-4) * -1);
+    }
+    .btn {
+      --tone: var(--color-accent);
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      border: 1px solid var(--tone);
+      border-radius: var(--radius-pill);
+      font: inherit;
+      font-weight: var(--weight-medium);
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      transform: translate(var(--mx, 0), var(--my, 0)) scale(var(--press, 1));
+      transition: transform var(--dur-base) var(--ease-out);
+    }
+    .btn:active {
+      --press: 0.97;
+    }
+    .md {
+      padding: var(--space-3) var(--space-5);
+      font-size: var(--text-base);
+    }
+    .sm {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+    }
+    .primary {
+      background: var(--tone);
+      color: var(--color-on-accent);
+    }
+    .secondary {
+      background: transparent;
+      color: var(--tone);
+    }
+    .ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--color-text);
+    }
+    .label {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    /* Glow: a static shadow on a pseudo-element, revealed by opacity (never animate box-shadow). */
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: var(--glow-accent);
+      opacity: 0;
+      transition: opacity var(--dur-base) var(--ease-out);
+      pointer-events: none;
+    }
+    .btn:hover::after,
+    .btn:focus-visible::after {
+      opacity: 1;
+    }
+    .ghost::after {
+      box-shadow: none;
+    }
+    .ghost:hover,
+    .secondary:hover {
+      background: color-mix(in srgb, var(--tone) 12%, transparent);
+    }
+
+    /* Shimmer: a highlight sweeps across on hover (transform only), clipped to the button. */
+    .shine {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+    .shine::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--shimmer);
+      transform: translateX(-100%);
+    }
+    .btn:hover .shine::before {
+      transform: translateX(100%);
+      transition: transform var(--dur-slow) var(--ease-in-out);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .shine {
+        display: none;
+      }
+    }
+  }
+</style>

@@ -1,2 +1,0 @@
-/* Cascade order, lowest to highest priority. Every stylesheet declares its layer. */
-@layer reset, tokens, base, components, utilities;

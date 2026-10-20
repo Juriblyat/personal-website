@@ -1,0 +1,9 @@
+---
+// Cascade layer order, lowest to highest priority. This must be the FIRST thing in <head>:
+// a layer's priority is set by where it first appears, and Astro injects component CSS early.
+// Every stylesheet declares its own layer (reset, tokens, base, components, utilities).
+---
+
+<style is:inline>
+  @layer reset, tokens, base, components, utilities;
+</style>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  tone?: 'neutral' | 'accent' | 'cyan' | 'tertiary';
+}
+const { tone = 'neutral' } = Astro.props;
+---
+
+<span class={`tag ${tone}`}><slot /></span>
+
+<style>
+  @layer components {
+    .tag {
+      --tone: var(--color-text-2);
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-1) var(--space-3);
+      border: 1px solid color-mix(in srgb, var(--tone) 40%, transparent);
+      border-radius: var(--radius-pill);
+      background: color-mix(in srgb, var(--tone) 10%, transparent);
+      color: var(--tone);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .accent {
+      --tone: var(--color-accent);
+    }
+    .cyan {
+      --tone: var(--color-accent-2);
+    }
+    .tertiary {
+      --tone: var(--color-accent-3);
+    }
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+interface Props {
+  /** Makes the whole card a link. Do not nest other links or buttons inside a linked card. */
+  href?: string;
+}
+const { href } = Astro.props;
+const Element = href ? 'a' : 'div';
+---
+
+<Element class:list={['card', { interactive: href }]} href={href}>
+  <slot />
+</Element>
+
+<style>
+  @layer components {
+    .card {
+      position: relative;
+      display: block;
+      padding: var(--space-5);
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-1);
+      color: inherit;
+      text-decoration: none;
+    }
+    .interactive {
+      transition: transform var(--dur-base) var(--ease-out);
+    }
+    .interactive:hover,
+    .interactive:focus-visible {
+      transform: translateY(-3px);
+    }
+    /* Hover treatment lives on a pseudo-element so only opacity animates: an accent border + glow. */
+    .interactive::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border: 1px solid var(--color-accent);
+      border-radius: inherit;
+      box-shadow: var(--glow-accent);
+      opacity: 0;
+      transition: opacity var(--dur-base) var(--ease-out);
+      pointer-events: none;
+    }
+    .interactive:hover::after,
+    .interactive:focus-visible::after {
+      opacity: 1;
+    }
+  }
+</style>
