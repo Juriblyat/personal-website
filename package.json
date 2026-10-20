@@ -13,7 +13,10 @@
     "check": "astro check",
     "lint": "biome check .",
     "format": "biome check --write .",
-    "test": "echo \"No tests yet (P0.4)\""
+    "test": "echo \"No tests yet (P0.4)\"",
+    "budget": "node scripts/check-bundle-size.mjs",
+    "lighthouse": "lhci autorun",
+    "verify": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm budget"
   },
   "dependencies": {
     "@astrojs/svelte": "^9.1.0",
@@ -23,6 +26,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.11",
     "@biomejs/biome": "^2.5.15",
+    "@lhci/cli": "^0.15.1",
     "typescript": "^6.0.3"
   },
   "packageManager": "pnpm@12.14.0"
