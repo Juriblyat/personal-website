@@ -1,0 +1,33 @@
+---
+import type { Gap, Tag } from './types';
+
+interface Props {
+  as?: Tag;
+  gap?: Gap;
+  justify?: 'start' | 'center' | 'end' | 'between';
+}
+const { as: Element = 'div', gap = 3, justify = 'start' } = Astro.props;
+---
+
+<Element class={`cluster ${justify}`} style={`--gap: var(--space-${gap})`}><slot /></Element>
+
+<style>
+  @layer components {
+    /* Inline group that wraps: tags, buttons, nav links. */
+    .cluster {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--gap);
+    }
+    .center {
+      justify-content: center;
+    }
+    .end {
+      justify-content: flex-end;
+    }
+    .between {
+      justify-content: space-between;
+    }
+  }
+</style>

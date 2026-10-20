@@ -37,6 +37,7 @@ Before finishing any piece: `pnpm verify` must be clean. Budgets live in `budget
 src/pages/        routes (static HTML first)
 src/layouts/      page shells
 src/components/   Astro components; Svelte islands live alongside, named *.svelte
+src/components/layout/  Container, Stack, Cluster, Grid, Section (use these instead of ad-hoc flex/grid + margins)
 src/styles/       tokens, layers, global CSS
 src/content/      MDX collections (projects, notes)
 src/lib/          framework-agnostic helpers
@@ -55,6 +56,10 @@ uses cascade layers declared in `src/styles/layers.css`. Use tokens, never raw c
 Type: Geist (`--font-sans`) and Geist Mono (`--font-mono`) are self-hosted by Astro's Fonts API (`astro.config.mjs`);
 `src/styles/typography.css` holds the fluid `--text-*` scale and heading styles. Pages use `src/layouts/Base.astro`,
 which preloads only the sans. `pnpm budget` enforces the font budget (<= 2 preloaded files, 80 KB).
+
+Layout: compose pages from the primitives in `src/components/layout/` (intrinsic, no breakpoints). Gutter, container
+widths and section rhythm are tokens (`--gutter`, `--container-*`, `--section-space`). Reference breakpoints: md 48rem,
+lg 80rem; prefer container queries and `auto-fit` grids over media queries.
 
 ## Naming
 

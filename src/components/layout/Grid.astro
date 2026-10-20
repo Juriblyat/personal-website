@@ -1,0 +1,24 @@
+---
+import type { Gap, Tag } from './types';
+
+interface Props {
+  as?: Tag;
+  gap?: Gap;
+  /** Narrowest a column may get before the grid drops a column. Any CSS length. */
+  min?: string;
+}
+const { as: Element = 'div', gap = 5, min = '16rem' } = Astro.props;
+---
+
+<Element class="grid" style={`--gap: var(--space-${gap}); --min: ${min}`}><slot /></Element>
+
+<style>
+  @layer components {
+    /* Intrinsic responsive grid: no breakpoints. min() stops a column overflowing narrow screens. */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(var(--min), 100%), 1fr));
+      gap: var(--gap);
+    }
+  }
+</style>

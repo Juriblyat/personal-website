@@ -1,0 +1,33 @@
+---
+import type { Tag } from './types';
+
+interface Props {
+  as?: Tag;
+  /** Max content width: narrow for reading, wide for showcase sections. */
+  size?: 'narrow' | 'default' | 'wide';
+}
+const { as: Element = 'div', size = 'default' } = Astro.props;
+---
+
+<Element class={`container ${size}`}><slot /></Element>
+
+<style>
+  @layer components {
+    .container {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: var(--max);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+    .narrow {
+      --max: calc(var(--container-narrow) + 2 * var(--gutter));
+    }
+    .default {
+      --max: calc(var(--container-default) + 2 * var(--gutter));
+    }
+    .wide {
+      --max: calc(var(--container-wide) + 2 * var(--gutter));
+    }
+  }
+</style>

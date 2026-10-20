@@ -42,6 +42,7 @@ const sizes = [...css.matchAll(/--(text-[\w]+):/g)].map((m) => m[1]);
 <style>
   .row {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     gap: var(--space-5);
     margin-block: var(--space-2);
