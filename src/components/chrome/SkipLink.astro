@@ -1,0 +1,23 @@
+<a class="skip" href="#main">Skip to content</a>
+
+<style>
+  @layer components {
+    /* First focusable element on every page; visible only while focused. */
+    .skip {
+      position: fixed;
+      top: var(--space-3);
+      left: var(--space-3);
+      z-index: var(--z-toast);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-pill);
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+      font-weight: var(--weight-medium);
+      text-decoration: none;
+      transform: translateY(-200%);
+    }
+    .skip:focus-visible {
+      transform: translateY(0);
+    }
+  }
+</style>

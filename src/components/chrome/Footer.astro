@@ -1,0 +1,41 @@
+---
+import Container from '../layout/Container.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <Container size="wide">
+    <div class="bar">
+      <p>© {year} Joeri Naegels</p>
+      <p>
+        <a href="https://github.com/Juriblyat/personal-website" rel="noopener noreferrer">Source</a>
+        {' · Built with Astro on Cloudflare'}
+      </p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  @layer components {
+    .footer {
+      margin-top: var(--section-space);
+      border-top: 1px solid var(--color-line);
+      color: var(--color-text-2);
+      font-size: var(--text-sm);
+    }
+    .bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-2) var(--space-5);
+      padding-block: var(--space-6);
+    }
+    .bar p {
+      margin: 0;
+    }
+    a {
+      color: var(--color-text);
+    }
+  }
+</style>

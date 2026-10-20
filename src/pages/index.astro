@@ -1,15 +1,13 @@
 ---
+import Container from '../components/layout/Container.astro';
+import Section from '../components/layout/Section.astro';
 import Base from '../layouts/Base.astro';
 ---
 
 <Base title="Joeri Naegels" description="Personal website of Joeri Naegels, backend engineer.">
-  <main>
-    <h1>Joeri Naegels</h1>
-  </main>
+  <Container>
+    <Section>
+      <h1>Joeri Naegels</h1>
+    </Section>
+  </Container>
 </Base>
-
-<style>
-  main {
-    padding: var(--space-7) var(--space-5);
-  }
-</style>

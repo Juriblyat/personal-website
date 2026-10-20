@@ -17,7 +17,8 @@
     "budget": "node scripts/check-bundle-size.mjs",
     "lighthouse": "lhci autorun",
     "verify": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm budget",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "baselines": "node scripts/update-baselines.mjs"
   },
   "dependencies": {
     "@astrojs/svelte": "^9.1.0",

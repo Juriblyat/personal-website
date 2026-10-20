@@ -1,5 +1,9 @@
 ---
 import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import Footer from '../components/chrome/Footer.astro';
+import Header from '../components/chrome/Header.astro';
+import SkipLink from '../components/chrome/SkipLink.astro';
 import LayerOrder from '../components/LayerOrder.astro';
 import '../styles/tokens.css';
 import '../styles/typography.css';
@@ -22,21 +26,48 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
+    <!-- Apply the saved theme before first paint (no flash), and carry it across view transitions. -->
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+      document.addEventListener('astro:before-swap', (e) => {
+        const t = document.documentElement.dataset.theme;
+        if (t) e.newDocument.documentElement.dataset.theme = t;
+        else delete e.newDocument.documentElement.dataset.theme;
+      });
+    </script>
+    <noscript><style>[data-theme-toggle] { display: none; }</style></noscript>
+    <ClientRouter />
     <!-- Only the above-the-fold sans is preloaded (budget: at most 2 preloaded font files, 80 KB). -->
     <Font cssVariable="--font-sans" preload={[{ subset: 'latin', style: 'normal' }]} />
     <Font cssVariable="--font-mono" />
   </head>
   <body>
-    <slot />
+    <SkipLink />
+    <Header />
+    <main id="main" tabindex="-1"><slot /></main>
+    <Footer />
   </body>
 </html>
 
 <style is:global>
   @layer base {
     body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
       margin: 0;
       background: var(--color-bg);
       color: var(--color-text);
+    }
+    main {
+      flex: 1;
+    }
+    /* main is only focused programmatically (skip link), so it needs no ring. */
+    main:focus-visible {
+      outline: none;
     }
   }
 </style>

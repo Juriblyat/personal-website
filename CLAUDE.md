@@ -27,6 +27,7 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm lighthouse` | Lighthouse CI against `dist/` using `lighthouserc.json` (needs Chrome; reports go to `.lighthouseci/`) |
 | `pnpm test` | Vitest unit tests (`*.test.ts` / `*.test.mjs` next to the code) |
 | `pnpm test:e2e` | Playwright smoke + screenshot tests at 360 and 1440 px (`CHROMIUM_PATH=/usr/bin/chromium` to use a system browser); needs `pnpm build` first |
+| `pnpm baselines <run-id>` | Copies CI's screenshots from a failed run into `tests/e2e/__screenshots__` (CI's renderer is the source of truth) |
 | `pnpm verify` | check + lint + test + build + budget: everything CI runs except e2e and Lighthouse |
 
 In an agent shell, Astro daemonizes `preview` and Playwright reports "webServer exited early". Run
@@ -41,6 +42,7 @@ src/pages/        routes (static HTML first)
 src/layouts/      page shells
 src/components/   Astro components; Svelte islands live alongside, named *.svelte
 src/components/layout/  Container, Stack, Cluster, Grid, Section (use these instead of ad-hoc flex/grid + margins)
+src/components/chrome/  Header, Footer, SkipLink, ThemeToggle (used by layouts/Base.astro)
 src/components/ui/      Button, Link, Tag, Card, Callout, Kbd, Icon (icons registered in icons.ts)
 src/styles/       tokens, layers, global CSS
 src/content/      MDX collections (projects, notes)
@@ -68,6 +70,10 @@ lg 80rem; prefer container queries and `auto-fit` grids over media queries.
 
 UI motion: components animate only `transform` and `opacity`. Glow and borders are pseudo-elements faded with opacity;
 shimmer is a translating gradient; the magnetic button is a ~1 KB script that is off for touch and reduced motion.
+
+Chrome: `layouts/Base.astro` provides skip link, header, `<main id="main">`, footer and `ClientRouter` view
+transitions; the saved theme is applied by an inline head script (see `docs/decisions/0006`). Scripts that act on page
+elements must be delegated on `document` so they survive page swaps. New pages use `Base` and go in `src/pages/`.
 
 ## Naming
 
