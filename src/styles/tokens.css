@@ -1,0 +1,102 @@
+/*
+ * Design tokens. One definition per token: colours use light-dark(<light>, <dark>), so the two
+ * themes can never drift apart. Dark is the default; light follows the OS unless [data-theme] says otherwise.
+ * Contrast for the text and accent pairs is enforced by tokens.test.ts.
+ */
+@layer tokens {
+  :root {
+    color-scheme: dark;
+
+    /* Surfaces: near-black with a faint blue cast / pastel pink */
+    --color-bg: light-dark(#fde8f0, #04050a);
+    --color-surface: light-dark(#fff5f9, #0a0c14);
+    --color-surface-2: light-dark(#ffffff, #121624);
+    --color-line: light-dark(#ecc4d6, #1c2133);
+    --color-line-strong: light-dark(#d99ab8, #34406a);
+
+    /* Text hierarchy */
+    --color-text: light-dark(#2a0f1d, #e9edf6);
+    --color-text-2: light-dark(#5e3a4d, #a8b1c8);
+    --color-text-3: light-dark(#7d4f66, #7e88a6);
+
+    /* Signals. accent is the primary; accent-2 and accent-3 are for secondary signals and the Mesh. */
+    --color-accent: light-dark(#b0127f, #3dff8f);
+    --color-accent-2: light-dark(#06728a, #22e5ff);
+    --color-accent-3: light-dark(#0a7a45, #ff3ee0);
+    --color-on-accent: light-dark(#ffffff, #03130a);
+    /* Warm incident colour: errors and alerts only (/status) */
+    --color-incident: light-dark(#b8400a, #ff7a3d);
+
+    /* Effects: glow, depth, blur. Only transform and opacity are ever animated. */
+    --glow-accent: 0 0 24px light-dark(rgb(176 18 127 / 0.28), rgb(61 255 143 / 0.35));
+    --glow-accent-2: 0 0 24px light-dark(rgb(6 114 138 / 0.28), rgb(34 229 255 / 0.35));
+    --glow-accent-3: 0 0 24px light-dark(rgb(10 122 69 / 0.28), rgb(255 62 224 / 0.35));
+    --shadow-1: 0 1px 2px light-dark(rgb(120 30 80 / 0.12), rgb(0 0 0 / 0.6));
+    --shadow-2: 0 8px 24px light-dark(rgb(120 30 80 / 0.16), rgb(0 0 0 / 0.55));
+    --shadow-3: 0 24px 64px light-dark(rgb(120 30 80 / 0.22), rgb(0 0 0 / 0.65));
+    --blur-sm: 8px;
+    --blur-md: 20px;
+    --blur-lg: 48px;
+    --shimmer: linear-gradient(
+      100deg,
+      transparent 30%,
+      light-dark(rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.12)) 50%,
+      transparent 70%
+    );
+
+    /* Spacing: 4px base */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+    --space-10: 8rem;
+
+    /* Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+
+    /* Layering */
+    --z-canvas: -1;
+    --z-base: 0;
+    --z-raised: 10;
+    --z-header: 100;
+    --z-overlay: 500;
+    --z-modal: 1000;
+    --z-toast: 1100;
+
+    /* Motion: nothing slower than --dur-slow except scene camera moves */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --dur-fast: 120ms;
+    --dur-base: 240ms;
+    --dur-slow: 600ms;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-fast: 0.01ms;
+      --dur-base: 0.01ms;
+      --dur-slow: 0.01ms;
+    }
+  }
+}

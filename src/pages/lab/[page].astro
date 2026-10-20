@@ -1,0 +1,19 @@
+---
+// Dev-only playground: getStaticPaths returns nothing in production, so no /lab page is ever built.
+// (getStaticPaths is hoisted by Astro, so it must not reference anything declared outside it.)
+import Lab from '../../layouts/Lab.astro';
+
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  const pages = import.meta.glob('../../lab/*.astro');
+  return Object.keys(pages).map((path) => ({
+    params: { page: path.split('/').pop()?.replace('.astro', '') },
+  }));
+}
+
+const { page } = Astro.params;
+const pages = import.meta.glob<typeof import('../../lab/tokens.astro')>('../../lab/*.astro', { eager: true });
+const Content = pages[`../../lab/${page}.astro`].default;
+---
+
+<Lab title={page ?? 'lab'}><Content /></Lab>

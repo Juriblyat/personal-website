@@ -1,0 +1,158 @@
+---
+import { readFileSync } from 'node:fs';
+
+// Read the tokens from the stylesheet itself, so this page can never go out of date.
+const css = readFileSync('src/styles/tokens.css', 'utf8');
+const names = (prefix: string) =>
+  [...css.matchAll(new RegExp(`--(${prefix}[\\w-]*):`, 'g'))].map((m) => `--${m[1]}`);
+
+const colors = names('color-');
+const spaces = names('space-');
+const radii = names('radius-');
+const zs = names('z-');
+const eases = names('ease-');
+const durs = names('dur-');
+const shadows = names('shadow-');
+const glows = names('glow-');
+const blurs = names('blur-');
+---
+
+<h1>Tokens</h1>
+
+<h2>Colour</h2>
+<div class="grid">
+  {
+    colors.map((c) => (
+      <div class="swatch">
+        <span class="chip" style={`background: var(${c})`} />
+        <code>{c}</code>
+      </div>
+    ))
+  }
+</div>
+
+<h2>Effects</h2>
+<div class="grid">
+  {
+    [...shadows, ...glows].map((s) => (
+      <div class="swatch">
+        <span class="chip" style={`background: var(--color-surface-2); box-shadow: var(${s})`} />
+        <code>{s}</code>
+      </div>
+    ))
+  }
+  {
+    blurs.map((b) => (
+      <div class="swatch">
+        <span class="chip blurry" style={`--b: var(${b})`} />
+        <code>{b}</code>
+      </div>
+    ))
+  }
+  <div class="swatch">
+    <span class="chip shimmer" />
+    <code>--shimmer</code>
+  </div>
+</div>
+
+<h2>Spacing</h2>
+{
+  spaces.map((s) => (
+    <div class="row">
+      <code>{s}</code>
+      <span class="bar" style={`width: var(${s})`} />
+    </div>
+  ))
+}
+
+<h2>Radius</h2>
+<div class="grid">
+  {
+    radii.map((r) => (
+      <div class="swatch">
+        <span class="chip outlined" style={`border-radius: var(${r})`} />
+        <code>{r}</code>
+      </div>
+    ))
+  }
+</div>
+
+<h2>Z-index</h2>
+<p>{zs.join(' · ')}</p>
+
+<h2>Motion</h2>
+<p>Hover a track to run it. Durations collapse to ~0 under <code>prefers-reduced-motion</code>.</p>
+{
+  eases.map((e) => (
+    <div class="row">
+      <code>{e}</code>
+      <div class="track" style={`--e: var(${e})`}>
+        <span class="dot" />
+      </div>
+    </div>
+  ))
+}
+<p>{durs.join(' · ')}</p>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: var(--space-5);
+  }
+  .swatch {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .chip {
+    display: block;
+    height: 4rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-line-strong);
+  }
+  .outlined {
+    background: var(--color-surface-2);
+  }
+  .blurry {
+    background: var(--color-accent);
+    filter: blur(var(--b));
+    border: 0;
+  }
+  .shimmer {
+    background: var(--color-surface-2) var(--shimmer) no-repeat;
+    background-size: 200% 100%;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block: var(--space-2);
+  }
+  .row code {
+    min-width: 9rem;
+  }
+  .bar {
+    height: 0.75rem;
+    background: var(--color-accent);
+    border-radius: var(--radius-sm);
+  }
+  .track {
+    width: 16rem;
+    height: 1.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    padding: 2px;
+  }
+  .dot {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-accent-2);
+    box-shadow: var(--glow-accent-2);
+    transition: transform var(--dur-slow) var(--e);
+  }
+  .track:hover .dot {
+    transform: translateX(14.5rem);
+  }
+</style>
