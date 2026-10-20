@@ -24,7 +24,7 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm format` | Biome auto-fix |
 | `pnpm build` | Production build |
 | `pnpm budget` | Fails if JS exceeds the weight budgets in `budgets.json` (run after build) |
-| `pnpm lighthouse` | Two Lighthouse CI stages against `dist/` (needs Chrome; reports go to `.lighthouseci/`): content budgets with the 3D chunk blocked (`lighthouserc.json`), then the home page with 3D loading (`lighthouserc.3d.json`) |
+| `pnpm lighthouse` | Two Lighthouse CI stages against `dist/` (needs Chrome; reports go to `.lighthouseci/`): all pages with the 3D chunk blocked (`lighthouserc.json`), then the home page unblocked in a software-GL environment, which must skip the 3D (`lighthouserc.no-gpu.json`) |
 | `pnpm test` | Vitest unit tests (`*.test.ts` / `*.test.mjs` next to the code) |
 | `pnpm test:e2e` | Playwright smoke + screenshot tests at 360 and 1440 px (`CHROMIUM_PATH=/usr/bin/chromium` to use a system browser); needs `pnpm build` first |
 | `pnpm baselines <run-id>` | Copies CI's screenshots from a failed run into `tests/e2e/__screenshots__` (CI's renderer is the source of truth) |
