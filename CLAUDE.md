@@ -23,8 +23,11 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm lint` | Biome lint + format check |
 | `pnpm format` | Biome auto-fix |
 | `pnpm build` | Production build |
+| `pnpm budget` | Fails if JS exceeds the weight budgets in `budgets.json` (run after build) |
+| `pnpm lighthouse` | Lighthouse CI against `dist/` using `lighthouserc.json` (needs Chrome; reports go to `.lighthouseci/`) |
+| `pnpm verify` | check + lint + test + build + budget: everything CI runs except Lighthouse |
 
-Before finishing any piece: `pnpm check && pnpm lint && pnpm build` must be clean.
+Before finishing any piece: `pnpm verify` must be clean. Budgets live in `budgets.json` and `lighthouserc.json`; change them only by changing the plan.
 
 ## Folder layout
 

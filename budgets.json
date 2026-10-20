@@ -1,0 +1,5 @@
+{
+  "initialJsGzipKb": 40,
+  "lazy3dGzipKb": 250,
+  "lazy3dChunkPattern": "(scene|three)"
+}
