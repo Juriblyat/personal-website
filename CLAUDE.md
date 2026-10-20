@@ -25,7 +25,9 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm build` | Production build |
 | `pnpm budget` | Fails if JS exceeds the weight budgets in `budgets.json` (run after build) |
 | `pnpm lighthouse` | Lighthouse CI against `dist/` using `lighthouserc.json` (needs Chrome; reports go to `.lighthouseci/`) |
-| `pnpm verify` | check + lint + test + build + budget: everything CI runs except Lighthouse |
+| `pnpm test` | Vitest unit tests (`*.test.ts` / `*.test.mjs` next to the code) |
+| `pnpm test:e2e` | Playwright smoke + screenshot tests at 360 and 1440 px (`CHROMIUM_PATH=/usr/bin/chromium` to use a system browser); needs `pnpm build` first |
+| `pnpm verify` | check + lint + test + build + budget: everything CI runs except e2e and Lighthouse |
 
 Before finishing any piece: `pnpm verify` must be clean. Budgets live in `budgets.json` and `lighthouserc.json`; change them only by changing the plan.
 
