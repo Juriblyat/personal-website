@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(colorScheme, () => {
-    test.use({ colorScheme });
+    // Reduced motion keeps the animated canvas out of the screenshot (it is nondeterministic).
+    test.use({ colorScheme, reducedMotion: 'reduce' });
 
     test('home matches its screenshot', async ({ page }) => {
       await page.goto('/');

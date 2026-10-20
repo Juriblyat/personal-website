@@ -24,7 +24,7 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm format` | Biome auto-fix |
 | `pnpm build` | Production build |
 | `pnpm budget` | Fails if JS exceeds the weight budgets in `budgets.json` (run after build) |
-| `pnpm lighthouse` | Lighthouse CI against `dist/` using `lighthouserc.json` (needs Chrome; reports go to `.lighthouseci/`) |
+| `pnpm lighthouse` | Two Lighthouse CI stages against `dist/` (needs Chrome; reports go to `.lighthouseci/`): all pages with the 3D chunk blocked (`lighthouserc.json`), then the home page unblocked in a software-GL environment, which must skip the 3D (`lighthouserc.no-gpu.json`) |
 | `pnpm test` | Vitest unit tests (`*.test.ts` / `*.test.mjs` next to the code) |
 | `pnpm test:e2e` | Playwright smoke + screenshot tests at 360 and 1440 px (`CHROMIUM_PATH=/usr/bin/chromium` to use a system browser); needs `pnpm build` first |
 | `pnpm baselines <run-id>` | Copies CI's screenshots from a failed run into `tests/e2e/__screenshots__` (CI's renderer is the source of truth) |
@@ -75,6 +75,11 @@ Chrome: `layouts/Base.astro` provides skip link, header, `<main id="main">`, foo
 transitions; the saved theme is applied by an inline head script (see `docs/decisions/0006`). Scripts that act on page
 elements must be delegated on `document` so they survive page swaps. New pages use `Base` and go in `src/pages/`.
 
+3D: `src/scene/` is only ever loaded lazily by `MeshCanvas.astro` (never import it from pages/layouts). `three` and
+`src/scene/` are bundled into one chunk named `scene` (see `astro.config.mjs`), budgeted by `pnpm budget`. The host
+owns the renderer and loop; scenes implement `MeshScene` (`scene.ts`). Canvas state is on `#mesh[data-mesh]` (+ `data-mesh-reason` when off); software GPUs get no 3D, and `?tier=high|low` overrides for tests. See
+`docs/decisions/0007` (measurements, and why the 3D budget is 300 KB gzip).
+
 ## Naming
 
 Files: `kebab-case` for routes/lib, `PascalCase` for components. Stores `camelCase`. CSS custom properties
@@ -84,7 +89,7 @@ Files: `kebab-case` for routes/lib, `PascalCase` for components. Stores `camelCa
 
 - Lighthouse mobile, every page: Performance ≥ 95; Accessibility, Best Practices, SEO = 100
 - LCP ≤ 1.2 s desktop / ≤ 2.0 s mobile (simulated 4G) · INP ≤ 100 ms · CLS ≤ 0.02
-- Initial JS on content pages (excl. 3D) ≤ 40 KB gzip · 3D bundle (lazy, after LCP) ≤ 250 KB gzip
+- Initial JS on content pages (excl. 3D) ≤ 40 KB gzip · 3D bundle (lazy, after LCP) ≤ 300 KB gzip
 - Fonts: ≤ 2 preloaded files, ≤ 80 KB total · Home excluding lazy 3D ≤ 600 KB transferred
 - Frame time ≤ 8 ms on M1-class laptop, ≤ 16 ms on mid-range phone (mid tier)
 - WCAG 2.2 AA, full keyboard use, reduced-motion honoured everywhere
