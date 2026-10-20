@@ -1,0 +1,61 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+interface Props {
+  type?: 'note' | 'info' | 'tip' | 'warning';
+  title?: string;
+}
+const { type = 'note', title } = Astro.props;
+const icon: Record<NonNullable<Props['type']>, IconName> = {
+  note: 'terminal',
+  info: 'info',
+  tip: 'lightbulb',
+  warning: 'alert',
+};
+---
+
+<aside class={`callout ${type}`}>
+  <span class="icon"><Icon name={icon[type]} /></span>
+  <div>
+    {title && <p class="title">{title}</p>}
+    <slot />
+  </div>
+</aside>
+
+<style>
+  @layer components {
+    .callout {
+      --tone: var(--color-text-2);
+      display: flex;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--space-5);
+      border: 1px solid var(--color-line);
+      border-left: 3px solid var(--tone);
+      border-radius: var(--radius-md);
+      background: color-mix(in srgb, var(--tone) 7%, var(--color-surface));
+    }
+    .info {
+      --tone: var(--color-accent-2);
+    }
+    .tip {
+      --tone: var(--color-accent);
+    }
+    .warning {
+      --tone: var(--color-incident);
+    }
+    .icon {
+      flex: none;
+      color: var(--tone);
+      line-height: 0;
+      padding-top: 0.2em;
+    }
+    .title {
+      margin: 0 0 var(--space-1);
+      font-weight: var(--weight-bold);
+    }
+    .callout :global(p:last-child) {
+      margin-bottom: 0;
+    }
+  }
+</style>

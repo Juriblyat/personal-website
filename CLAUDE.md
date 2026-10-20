@@ -29,6 +29,9 @@ No Tailwind, no UI kits. Astro AGENTS.md notes (dev server in background mode, d
 | `pnpm test:e2e` | Playwright smoke + screenshot tests at 360 and 1440 px (`CHROMIUM_PATH=/usr/bin/chromium` to use a system browser); needs `pnpm build` first |
 | `pnpm verify` | check + lint + test + build + budget: everything CI runs except e2e and Lighthouse |
 
+In an agent shell, Astro daemonizes `preview` and Playwright reports "webServer exited early". Run
+`env -u CLAUDECODE pnpm test:e2e` (CI and normal terminals are unaffected).
+
 Before finishing any piece: `pnpm verify` must be clean. Budgets live in `budgets.json` and `lighthouserc.json`; change them only by changing the plan.
 
 ## Folder layout
@@ -38,6 +41,7 @@ src/pages/        routes (static HTML first)
 src/layouts/      page shells
 src/components/   Astro components; Svelte islands live alongside, named *.svelte
 src/components/layout/  Container, Stack, Cluster, Grid, Section (use these instead of ad-hoc flex/grid + margins)
+src/components/ui/      Button, Link, Tag, Card, Callout, Kbd, Icon (icons registered in icons.ts)
 src/styles/       tokens, layers, global CSS
 src/content/      MDX collections (projects, notes)
 src/lib/          framework-agnostic helpers
@@ -50,7 +54,8 @@ docs/             PLAN.md, decisions/
 ## Styling
 
 Tokens live in `src/styles/tokens.css` (colours use `light-dark()`; one definition per token) and every stylesheet
-uses cascade layers declared in `src/styles/layers.css`. Use tokens, never raw colours or magic numbers. Browse them at
+uses cascade layers (order declared once, inline and first in `<head>`, by `src/components/LayerOrder.astro`;
+`tests/e2e/layers.spec.ts` guards it). Use tokens, never raw colours or magic numbers. Browse them at
 `/lab/tokens` in dev; `/lab` is never built for production. `src/styles/tokens.test.ts` enforces AA contrast.
 
 Type: Geist (`--font-sans`) and Geist Mono (`--font-mono`) are self-hosted by Astro's Fonts API (`astro.config.mjs`);
@@ -60,6 +65,9 @@ which preloads only the sans. `pnpm budget` enforces the font budget (<= 2 prelo
 Layout: compose pages from the primitives in `src/components/layout/` (intrinsic, no breakpoints). Gutter, container
 widths and section rhythm are tokens (`--gutter`, `--container-*`, `--section-space`). Reference breakpoints: md 48rem,
 lg 80rem; prefer container queries and `auto-fit` grids over media queries.
+
+UI motion: components animate only `transform` and `opacity`. Glow and borders are pseudo-elements faded with opacity;
+shimmer is a translating gradient; the magnetic button is a ~1 KB script that is off for touch and reduced motion.
 
 ## Naming
 

@@ -1,0 +1,90 @@
+---
+import Cluster from '../components/layout/Cluster.astro';
+import Grid from '../components/layout/Grid.astro';
+import Stack from '../components/layout/Stack.astro';
+import Button from '../components/ui/Button.astro';
+import Callout from '../components/ui/Callout.astro';
+import Card from '../components/ui/Card.astro';
+import Icon from '../components/ui/Icon.astro';
+import { type IconName, icons } from '../components/ui/icons';
+import Kbd from '../components/ui/Kbd.astro';
+import Link from '../components/ui/Link.astro';
+import Tag from '../components/ui/Tag.astro';
+---
+
+<h1>Components</h1>
+<p>Hover, focus (Tab) and press everything. Under <code>prefers-reduced-motion</code> the shimmer and magnetic pull switch off.</p>
+
+<h2>Button</h2>
+<Stack gap={5}>
+  <Cluster gap={4}>
+    <Button>Primary</Button>
+    <Button variant="secondary">Secondary</Button>
+    <Button variant="ghost">Ghost</Button>
+    <Button size="sm">Small</Button>
+  </Cluster>
+  <Cluster gap={4}>
+    <Button magnetic>Magnetic <Icon name="arrow-right" /></Button>
+    <Button href="/lab/components" variant="secondary">As a link <Icon name="arrow-up-right" /></Button>
+  </Cluster>
+</Stack>
+
+<h2>Link</h2>
+<p>Body text with an <Link href="/lab/components">internal link</Link> and an <Link href="https://astro.build" external>external link <Icon name="external-link" size="0.9em" /></Link>.</p>
+
+<h2>Tag</h2>
+<Cluster gap={2}>
+  <Tag>neutral</Tag>
+  <Tag tone="accent">accent</Tag>
+  <Tag tone="cyan">cyan</Tag>
+  <Tag tone="tertiary">tertiary</Tag>
+</Cluster>
+
+<h2>Kbd</h2>
+<p>Open the command palette with <Kbd>⌘</Kbd> <Kbd>K</Kbd> or <Kbd>Ctrl</Kbd> <Kbd>K</Kbd>.</p>
+
+<h2>Card</h2>
+<Grid min="16rem">
+  <Card>
+    <h3>Static card</h3>
+    <p>Surface, hairline border, depth.</p>
+    <Cluster gap={2}><Tag tone="cyan">astro</Tag><Tag tone="accent">svelte</Tag></Cluster>
+  </Card>
+  <Card href="/lab/components">
+    <h3>Linked card</h3>
+    <p>Lifts and glows on hover or focus.</p>
+    <Cluster gap={2}><Tag tone="tertiary">three.js</Tag></Cluster>
+  </Card>
+</Grid>
+
+<h2>Callout</h2>
+<Stack gap={4}>
+  <Callout title="Note">A plain note.</Callout>
+  <Callout type="info" title="Info">Something worth knowing.</Callout>
+  <Callout type="tip" title="Tip">A helpful shortcut.</Callout>
+  <Callout type="warning" title="Warning">Alerts use the incident colour.</Callout>
+</Stack>
+
+<h2>Icons</h2>
+<div class="icons">
+  {(Object.keys(icons) as IconName[]).map((name) => (
+    <div class="icon-cell"><Icon name={name} size="1.75rem" /><code>{name}</code></div>
+  ))}
+</div>
+
+<style>
+  .icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: var(--space-4);
+  }
+  .icon-cell {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+</style>

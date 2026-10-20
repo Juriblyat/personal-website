@@ -1,8 +1,9 @@
 ---
 import { Font } from 'astro:assets';
-import '../styles/layers.css';
+import LayerOrder from '../components/LayerOrder.astro';
 import '../styles/tokens.css';
 import '../styles/typography.css';
+import '../styles/base.css';
 
 interface Props {
   title: string;
@@ -13,6 +14,7 @@ const { title, description } = Astro.props;
 
 <html lang="en">
   <head>
+    <LayerOrder />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />

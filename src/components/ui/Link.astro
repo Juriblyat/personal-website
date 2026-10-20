@@ -1,0 +1,40 @@
+---
+interface Props {
+  href: string;
+  /** Opens in a new tab, safely. */
+  external?: boolean;
+}
+const { href, external = false } = Astro.props;
+const attrs = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+<!-- biome-ignore lint/a11y/useAnchorContent: the link text is the slot -->
+<a class="link" href={href} {...attrs}><slot /></a>
+
+<style>
+  @layer components {
+    .link {
+      position: relative;
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+    /* Underline draws in from the left (transform only). It is always visible at rest as a faint rule. */
+    .link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.15em;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--dur-base) var(--ease-out);
+    }
+    .link:hover::after,
+    .link:focus-visible::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+</style>
