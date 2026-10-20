@@ -1,0 +1,22 @@
+---
+import type { Gap, Tag } from './types';
+
+interface Props {
+  as?: Tag;
+  gap?: Gap;
+}
+const { as: Element = 'div', gap = 4 } = Astro.props;
+---
+
+<Element class="stack" style={`--gap: var(--space-${gap})`}><slot /></Element>
+
+<style>
+  @layer components {
+    /* Vertical rhythm: children are separated by --gap, never by their own margins. */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+  }
+</style>

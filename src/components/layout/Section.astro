@@ -1,0 +1,19 @@
+---
+import type { Tag } from './types';
+
+interface Props {
+  as?: Tag;
+}
+const { as: Element = 'section' } = Astro.props;
+---
+
+<Element class="section"><slot /></Element>
+
+<style>
+  @layer components {
+    /* Vertical rhythm between page sections. */
+    .section {
+      padding-block: var(--section-space);
+    }
+  }
+</style>

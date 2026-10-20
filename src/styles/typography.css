@@ -77,4 +77,8 @@
     font-family: var(--font-mono);
     font-size: 0.9em;
   }
+  /* Long lines scroll inside the block instead of widening the page. */
+  pre {
+    overflow-x: auto;
+  }
 }
