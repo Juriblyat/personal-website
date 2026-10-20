@@ -7,7 +7,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
     test('home matches its screenshot', async ({ page }) => {
       await page.goto('/');
       await page.evaluate(() => document.fonts.ready);
-      await expect(page).toHaveScreenshot(`home-${colorScheme}.png`);
+      // The copyright year changes with the build date, so it is masked rather than baselined.
+      await expect(page).toHaveScreenshot(`home-${colorScheme}.png`, {
+        mask: [page.locator('footer p').first()],
+      });
     });
   });
 }
