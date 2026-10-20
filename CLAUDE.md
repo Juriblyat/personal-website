@@ -77,7 +77,7 @@ elements must be delegated on `document` so they survive page swaps. New pages u
 
 3D: `src/scene/` is only ever loaded lazily by `MeshCanvas.astro` (never import it from pages/layouts). `three` and
 `src/scene/` are bundled into one chunk named `scene` (see `astro.config.mjs`), budgeted by `pnpm budget`. The host
-owns the renderer and loop; scenes implement `MeshScene` (`scene.ts`). Canvas state is on `#mesh[data-mesh]`. See
+owns the renderer and loop; scenes implement `MeshScene` (`scene.ts`). Canvas state is on `#mesh[data-mesh]` (+ `data-mesh-reason` when off); software GPUs get no 3D, and `?tier=high|low` overrides for tests. See
 `docs/decisions/0007` (measurements, and the open 250 KB question for P4.3).
 
 ## Naming

@@ -3,12 +3,12 @@ import { expect, test } from '@playwright/test';
 const mesh = (page: import('@playwright/test').Page) => page.locator('#mesh');
 
 test('the mesh loads after the page, then runs', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?tier=high');
   await expect(mesh(page)).toHaveAttribute('data-mesh', 'running', { timeout: 20_000 });
 });
 
 test('the same canvas survives navigation and keeps running', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?tier=high');
   await expect(mesh(page)).toHaveAttribute('data-mesh', 'running', { timeout: 20_000 });
   await page.evaluate(() => {
     (document.getElementById('mesh') as HTMLCanvasElement & { __kept?: boolean }).__kept = true;
@@ -25,7 +25,7 @@ test('the same canvas survives navigation and keeps running', async ({ page }) =
 });
 
 test('the render loop pauses while the tab is hidden', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?tier=high');
   await expect(mesh(page)).toHaveAttribute('data-mesh', 'running', { timeout: 20_000 });
 
   const setHidden = (hidden: boolean) =>
@@ -51,7 +51,20 @@ test.describe('reduced motion', () => {
     await page.waitForTimeout(1500);
 
     await expect(mesh(page)).toHaveAttribute('data-mesh', 'off');
+    await expect(mesh(page)).toHaveAttribute('data-mesh-reason', 'reduced-motion');
     expect(requests.some((u) => /\/_astro\/scene\./.test(u))).toBe(false);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
+});
+
+test('tier=low keeps the 3D code out entirely', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', (r) => requests.push(r.url()));
+  await page.goto('/?tier=low');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1500);
+
+  await expect(mesh(page)).toHaveAttribute('data-mesh', 'off');
+  await expect(mesh(page)).toHaveAttribute('data-mesh-reason', 'tier-low');
+  expect(requests.some((u) => /\/_astro\/scene\./.test(u))).toBe(false);
 });

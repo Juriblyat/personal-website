@@ -15,7 +15,7 @@
     "format": "biome check --write .",
     "test": "vitest run",
     "budget": "node scripts/check-bundle-size.mjs",
-    "lighthouse": "lhci autorun && lhci autorun --config=lighthouserc.3d.json",
+    "lighthouse": "lhci autorun && lhci autorun --config=lighthouserc.no-gpu.json",
     "verify": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm budget",
     "test:e2e": "playwright test",
     "baselines": "node scripts/update-baselines.mjs"

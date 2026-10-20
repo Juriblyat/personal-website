@@ -10,7 +10,7 @@
         "categories:performance": [
           "error",
           {
-            "minScore": 0.9
+            "minScore": 0.95
           }
         ],
         "categories:best-practices": [
@@ -34,7 +34,7 @@
         "total-blocking-time": [
           "error",
           {
-            "maxNumericValue": 300
+            "maxNumericValue": 150
           }
         ]
       }
