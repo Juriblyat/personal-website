@@ -120,8 +120,8 @@ Suggested order for a single builder: P0 → P1 → P4.1–P4.3 (de-risk the Mes
 | P1.1 | Tokens | Colour, spacing, radius, z-index, easing and duration tokens as CSS custom properties; cascade layers; accent decided | `/lab/tokens` shows every token (`/lab` = dev-only playground, excluded from prod) | Done |
 | P1.2 | Typography | Self-hosted, subsetted Geist + Geist Mono (via Astro's Fonts API); fluid type scale; preload | Type specimen on `/lab`; zero layout shift on font load | Done |
 | P1.3 | Layout primitives | Container, grid, stack, section rhythm; breakpoints | `/lab/layout` correct at 360, 768, 1440 px | Done |
-| P1.4 | Core components | Button (magnetic), Link (animated underline), Tag, Card, Callout, Kbd, icon set | All on `/lab` with focus, hover and reduced-motion states | In review |
-| P1.5 | Site chrome and transitions | Header, nav, footer, skip link; `ClientRouter` view transitions between pages | Navigation animates with JS on and works plainly with JS off | Not started |
+| P1.4 | Core components | Button (magnetic), Link (animated underline), Tag, Card, Callout, Kbd, icon set | All on `/lab` with focus, hover and reduced-motion states | Done |
+| P1.5 | Site chrome and transitions | Header, nav, footer, skip link; `ClientRouter` view transitions between pages | Navigation animates with JS on and works plainly with JS off | In review |
 
 ### Phase 2 — Content engine
 

@@ -23,23 +23,30 @@ const attrs = href ? { href } : { type };
 </Element>}
 
 <script>
-  // Magnetic pull: the wrapper (which never moves) tracks the pointer; the button follows via --mx/--my.
+  // Magnetic pull. The zone (which never moves) tracks the pointer; the button follows via --mx/--my.
+  // Delegated on document so it keeps working after view transitions swap the page.
   const canHover = matchMedia(
     '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
   ).matches;
+  let active: HTMLElement | null = null;
+  const release = () => {
+    const btn = active?.firstElementChild as HTMLElement | undefined;
+    btn?.style.removeProperty('--mx');
+    btn?.style.removeProperty('--my');
+    active = null;
+  };
   if (canHover) {
-    for (const zone of document.querySelectorAll<HTMLElement>('[data-magnetic]')) {
+    document.addEventListener('pointermove', (e) => {
+      const zone = (e.target as Element).closest?.<HTMLElement>('[data-magnetic]') ?? null;
+      if (active && active !== zone) release();
+      if (!zone) return;
+      active = zone;
+      const r = zone.getBoundingClientRect();
       const btn = zone.firstElementChild as HTMLElement;
-      zone.addEventListener('pointermove', (e) => {
-        const r = zone.getBoundingClientRect();
-        btn.style.setProperty('--mx', `${(e.clientX - r.left - r.width / 2) * 0.25}px`);
-        btn.style.setProperty('--my', `${(e.clientY - r.top - r.height / 2) * 0.25}px`);
-      });
-      zone.addEventListener('pointerleave', () => {
-        btn.style.removeProperty('--mx');
-        btn.style.removeProperty('--my');
-      });
-    }
+      btn.style.setProperty('--mx', `${(e.clientX - r.left - r.width / 2) * 0.25}px`);
+      btn.style.setProperty('--my', `${(e.clientY - r.top - r.height / 2) * 0.25}px`);
+    });
+    document.documentElement.addEventListener('pointerleave', release);
   }
 </script>
 
