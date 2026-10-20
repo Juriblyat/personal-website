@@ -1,0 +1,80 @@
+/*
+ * Type tokens. Fluid scale between 360px and 1440px viewports (base 16px to 18px; ratio 1.2 up to
+ * 1.333 for headings), generated with the Utopia formula: clamp(min, intercept + slope * vw, max).
+ * --font-sans and --font-mono are provided by Astro's Fonts API (see astro.config.mjs).
+ */
+@layer tokens {
+  :root {
+    --text-xs: clamp(0.694rem, 0.666rem + 0.129vw, 0.781rem);
+    --text-sm: clamp(0.833rem, 0.799rem + 0.154vw, 0.938rem);
+    --text-base: clamp(1rem, 0.958rem + 0.185vw, 1.125rem);
+    --text-lg: clamp(1.2rem, 1.1rem + 0.444vw, 1.5rem);
+    --text-xl: clamp(1.44rem, 1.254rem + 0.828vw, 1.999rem);
+    --text-2xl: clamp(1.728rem, 1.416rem + 1.388vw, 2.665rem);
+    --text-3xl: clamp(2.074rem, 1.581rem + 2.19vw, 3.552rem);
+    --text-4xl: clamp(2.488rem, 1.739rem + 3.328vw, 4.735rem);
+    --text-5xl: clamp(2.986rem, 1.877rem + 4.927vw, 6.312rem);
+    --text-6xl: clamp(3.583rem, 1.973rem + 7.156vw, 8.413rem);
+
+    --leading-tight: 1.05;
+    --leading-snug: 1.25;
+    --leading-normal: 1.55;
+
+    --tracking-display: -0.04em;
+    --tracking-heading: -0.025em;
+    --tracking-normal: 0;
+    --tracking-label: 0.08em;
+
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-bold: 700;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    font-weight: var(--weight-regular);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: var(--weight-bold);
+    text-wrap: balance;
+  }
+  h1 {
+    font-size: var(--text-5xl);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+  }
+  h2 {
+    font-size: var(--text-3xl);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-heading);
+  }
+  h3 {
+    font-size: var(--text-xl);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-heading);
+  }
+  h4 {
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+  }
+  p {
+    text-wrap: pretty;
+  }
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+}
