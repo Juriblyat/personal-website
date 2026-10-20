@@ -83,7 +83,7 @@ The WebGL must never cost the content: the 3D loads after the page is already fa
 | Speed | Interaction to Next Paint | ≤ 100 ms |
 | Speed | Cumulative Layout Shift | ≤ 0.02 |
 | Weight | Initial JS on content pages (excl. 3D) | ≤ 40 KB gzip |
-| Weight | 3D bundle (lazy, after LCP) | ≤ 250 KB gzip |
+| Weight | 3D bundle (lazy, after LCP) | ≤ 300 KB gzip (raised from 250, see `docs/decisions/0007`) |
 | Weight | Fonts | ≤ 2 preloaded files, ≤ 80 KB total |
 | Weight | Home page, excluding lazy 3D | ≤ 600 KB transferred |
 | 3D | Frame time | ≤ 8 ms on an M1-class laptop, ≤ 16 ms on a mid-range phone (mid tier) |

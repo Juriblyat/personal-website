@@ -1,6 +1,6 @@
 {
   "initialJsGzipKb": 40,
-  "lazy3dGzipKb": 250,
+  "lazy3dGzipKb": 300,
   "lazy3dChunkPattern": "(scene|three)",
   "preloadedFontFiles": 2,
   "preloadedFontKb": 80

@@ -78,7 +78,7 @@ elements must be delegated on `document` so they survive page swaps. New pages u
 3D: `src/scene/` is only ever loaded lazily by `MeshCanvas.astro` (never import it from pages/layouts). `three` and
 `src/scene/` are bundled into one chunk named `scene` (see `astro.config.mjs`), budgeted by `pnpm budget`. The host
 owns the renderer and loop; scenes implement `MeshScene` (`scene.ts`). Canvas state is on `#mesh[data-mesh]` (+ `data-mesh-reason` when off); software GPUs get no 3D, and `?tier=high|low` overrides for tests. See
-`docs/decisions/0007` (measurements, and the open 250 KB question for P4.3).
+`docs/decisions/0007` (measurements, and why the 3D budget is 300 KB gzip).
 
 ## Naming
 
@@ -89,7 +89,7 @@ Files: `kebab-case` for routes/lib, `PascalCase` for components. Stores `camelCa
 
 - Lighthouse mobile, every page: Performance ≥ 95; Accessibility, Best Practices, SEO = 100
 - LCP ≤ 1.2 s desktop / ≤ 2.0 s mobile (simulated 4G) · INP ≤ 100 ms · CLS ≤ 0.02
-- Initial JS on content pages (excl. 3D) ≤ 40 KB gzip · 3D bundle (lazy, after LCP) ≤ 250 KB gzip
+- Initial JS on content pages (excl. 3D) ≤ 40 KB gzip · 3D bundle (lazy, after LCP) ≤ 300 KB gzip
 - Fonts: ≤ 2 preloaded files, ≤ 80 KB total · Home excluding lazy 3D ≤ 600 KB transferred
 - Frame time ≤ 8 ms on M1-class laptop, ≤ 16 ms on mid-range phone (mid tier)
 - WCAG 2.2 AA, full keyboard use, reduced-motion honoured everywhere

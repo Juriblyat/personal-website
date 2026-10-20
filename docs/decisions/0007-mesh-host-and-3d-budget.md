@@ -13,24 +13,19 @@ Date: 2026-10-20 · Status: accepted (budget question open for P4.3)
 
 ## Measurements (three 0.186, esbuild, minified, tree-shaken)
 
-| Bundle | gzip | brotli |
+| Bundle | Uncompressed | gzip |
 | --- | --- | --- |
-| `WebGLRenderer` only, trivial scene | 131 KB | 108 KB |
-| `WebGPURenderer`, trivial scene (what ships in P4.1) | 207 KB | 172 KB |
-| `WebGPURenderer` + a realistic TSL set + `BloomNode`, no scene code | 245 KB | 195 KB |
+| `WebGLRenderer` only, trivial scene | 522 KB | 131 KB |
+| `WebGPURenderer`, trivial scene (what ships in P4.1) | 774 KB | 207 KB |
+| `WebGPURenderer` + a realistic TSL set + `BloomNode`, no scene code | 888 KB | 245 KB |
 
-Cloudflare serves brotli, so visitors receive the brotli figure.
+**Brotli does not help here.** Measured on the live Cloudflare preview, the shipped chunk is 767 KB uncompressed, 206 KB with gzip and 205 KB with brotli: Cloudflare compresses on the fly at a fast setting, so its brotli is barely smaller than gzip. (Maximum-effort brotli would give ~167 KB, but visitors never receive that.) So budgets stay in gzip, which matches what is really transferred.
 
-## Open: the 250 KB gzip budget (decide at P4.3)
+## Decision: the 3D budget is 300 KB gzip (was 250)
 
-The planned recipe (WebGPU + TSL + bloom) is already 245 KB gzip before any scene code, so the real Mesh will not fit 250 KB gzip as measured today. Options when P4.3 starts:
+The planned recipe (WebGPU + TSL + bloom) is already 245 KB before any scene code, so 250 KB could never hold the real Mesh. The 3D costs visitors a one-time download after the page has loaded, plus main-thread time; it does not affect LCP, and it is skipped entirely for reduced-motion, Save-Data and software-GPU visitors. Bloom costs only ~33 KB and delivers the glow the design depends on. 300 KB leaves ~55 KB for the scene itself.
 
-1. Measure the 3D budget in brotli (what is actually transferred): 195 KB leaves ~55 KB of headroom. Amend the plan wording.
-2. Raise the gzip budget to ~300 KB.
-3. Drop bloom/TSL post-processing for a cheaper glow (pre-blurred sprites), keeping WebGPU/WebGL2.
-4. Split tiers: plain `WebGLRenderer` (131 KB) for mid, WebGPU only for high. Costs two shader code paths, against the "one shader codebase" goal.
-
-Recommendation: option 1, then 3 if the scene grows.
+If the scene outgrows 300 KB, the levers in order: replace bloom with a cheaper pre-blurred glow, then trim unused TSL nodes. A plain-WebGL second code path (131 KB) was rejected: it doubles the shader code to maintain.
 
 ## What the 3D costs the page (Lighthouse, simulated mobile, 3 runs x 4 pages)
 
