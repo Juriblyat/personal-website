@@ -12,7 +12,7 @@ export function getStaticPaths() {
 }
 
 const { page } = Astro.params;
-const pages = import.meta.glob<{ default: typeof Lab }>('../../lab/*.astro', { eager: true });
+const pages = import.meta.glob<typeof import('../../lab/tokens.astro')>('../../lab/*.astro', { eager: true });
 const Content = pages[`../../lab/${page}.astro`].default;
 ---
 
