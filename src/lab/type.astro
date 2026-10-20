@@ -1,0 +1,59 @@
+---
+import { readFileSync } from 'node:fs';
+
+const css = readFileSync('src/styles/typography.css', 'utf8');
+const sizes = [...css.matchAll(/--(text-[\w]+):/g)].map((m) => m[1]);
+---
+
+<h1>Type</h1>
+<p>Geist for display and body, Geist Mono for data and code. Resize the window: every step is fluid.</p>
+
+<h2>Scale</h2>
+{
+  sizes.map((s) => (
+    <div class="row">
+      <code>--{s}</code>
+      <span style={`font-size: var(--${s}); line-height: var(--leading-snug)`}>Signal in the dark</span>
+    </div>
+  ))
+}
+
+<h2>Headings</h2>
+<h1>Heading one, display tracking</h1>
+<h2>Heading two, tighter tracking</h2>
+<h3>Heading three</h3>
+<h4>Heading four</h4>
+
+<h2>Body and mono</h2>
+<p>
+  Body copy sits at <code>--text-base</code> with a 1.55 line height. Lines stay readable because
+  paragraphs use <code>text-wrap: pretty</code> and headings balance.
+</p>
+<pre><code>const mesh = await fetch('/api/health'); // Geist Mono</code></pre>
+<p class="label">LABEL · TRACKED · MONO</p>
+
+<h2>Weights (variable, 100–900)</h2>
+{
+  [100, 300, 400, 500, 700, 900].map((w) => (
+    <p style={`font-weight: ${w}; font-size: var(--text-xl); margin: 0`}>{w} The quick brown fox</p>
+  ))
+}
+
+<style>
+  .row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-5);
+    margin-block: var(--space-2);
+  }
+  .row code {
+    min-width: 8rem;
+    flex: none;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-3);
+  }
+</style>

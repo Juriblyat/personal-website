@@ -6,3 +6,11 @@ export function initialScriptUrls(html) {
   ].map((m) => m[1]);
   return [...new Set(urls)].filter((u) => u.startsWith('/'));
 }
+
+// URLs of the fonts a page preloads.
+export function preloadedFontUrls(html) {
+  const urls = [...html.matchAll(/<link[^>]+rel="preload"[^>]+href="([^"]+)"[^>]+as="font"/g)].map(
+    (m) => m[1],
+  );
+  return [...new Set(urls)].filter((u) => u.startsWith('/'));
+}

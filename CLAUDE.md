@@ -52,6 +52,10 @@ Tokens live in `src/styles/tokens.css` (colours use `light-dark()`; one definiti
 uses cascade layers declared in `src/styles/layers.css`. Use tokens, never raw colours or magic numbers. Browse them at
 `/lab/tokens` in dev; `/lab` is never built for production. `src/styles/tokens.test.ts` enforces AA contrast.
 
+Type: Geist (`--font-sans`) and Geist Mono (`--font-mono`) are self-hosted by Astro's Fonts API (`astro.config.mjs`);
+`src/styles/typography.css` holds the fluid `--text-*` scale and heading styles. Pages use `src/layouts/Base.astro`,
+which preloads only the sans. `pnpm budget` enforces the font budget (<= 2 preloaded files, 80 KB).
+
 ## Naming
 
 Files: `kebab-case` for routes/lib, `PascalCase` for components. Stores `camelCase`. CSS custom properties
